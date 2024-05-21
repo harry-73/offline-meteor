@@ -1,6 +1,4 @@
-# Meteor + Vue3 + Vite
-
-This is a simple example of how to use Vue3 with Meteor.
+# Meteor3-rc1: offline issue reproduction
 
 ## How to use
 
@@ -9,11 +7,19 @@ This is a simple example of how to use Vue3 with Meteor.
 3. Run `meteor`
 4. Open `http://localhost:3000` in your browser
 
-## Libraries used
+## Reproduction
 
-- [Vue3](https://v3.vuejs.org/)
-- [Vite](https://vitejs.dev/)
-- [Vue Router](https://next.router.vuejs.org/)
-- [Meteor](https://www.meteor.com/)
-- [Vue Meteor Tracker](https://github.com/meteor-vue/vue-meteor-tracker)
-- [Tailwind CSS](https://tailwindcss.com/)
+- The user is auto-loggued
+- Via Dev tools, on Network tab, put the browser offline
+- In the app, add a new link (Text + url)
+- The new link will be displayed (Client side)
+- For the server side, the method message is in the queue
+- Put back the browser on-line.
+- Results:
+    - the method is applied on server side but this.userId is undefined => throw an error
+    - the entry is deleted from minimongo 
+- Expected results: 
+    -  Entry is added on server side into mongodb
+    -  this.userId is defined on server side
+- Issue:
+    - The login message in the DDP is sent after the method message
